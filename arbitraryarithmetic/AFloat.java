@@ -255,7 +255,33 @@ public class AFloat {
 
         }
 
-        // add fucntion for floating point numbers
+        private static String removeEndingZeros (String number){
+
+            if( number.indexOf('.') == -1 ){
+                return number ;
+            }
+
+            int index_of_nonzero_digit = -1 ;
+
+            
+
+            for ( int i = number.length() - 1 ; i >= 0 ; i -- ){
+                if( number.charAt(i) == '.' ){
+                    index_of_nonzero_digit = i ;
+                    break;
+                }
+
+                if( number.charAt(i) != '0'){
+                    index_of_nonzero_digit = i + 1 ;
+                    break;
+                }
+            }
+
+            return number.substring(0, index_of_nonzero_digit);
+                
+        }
+
+        // add function for floating point numbers
         public static String add ( AFloat num1 , AFloat num2 ){
 
             String number1 = num1.getFloat();
@@ -313,6 +339,8 @@ public class AFloat {
     
             result = removeLeadingZeros(result) ;
 
+            result = removeEndingZeros(result) ;
+
             return result ;
     
             //return result.charAt(result.length()-1) == '.' ? result.substring(0,result.length() - 1) : result ;
@@ -368,10 +396,96 @@ public class AFloat {
     
             result = removeLeadingZeros(result) ;
 
+            result = removeEndingZeros(result);
+
             return result;
     
             //return result.charAt(result.length()-1) == '.' ? result.substring(0,result.length() - 1) : result ;
     
+        }
+
+        private static String multiplicationWithDigit(String number , String digit){
+
+            int length_of_number = number.length() ;
+    
+            int carry = 0 ;
+    
+            String result = "" ;
+    
+            for ( int i = length_of_number - 1 ; i >= 0  ; i -- ){
+    
+                int product = ( ( (int)number.charAt(i) - 48 ) * ( (int)digit.charAt(0) - 48 ) ) + carry ;
+    
+                carry = product / 10 ;
+    
+                result = Integer.toString(( product - (carry * 10) )).concat(result);
+            }
+    
+            if( carry != 0 )
+                result = Integer.toString( carry ).concat(result);
+    
+            return result ;
+        }
+    
+        private static String multiply (String number1 , String number2){
+    
+            //int length_of_number1 = number1.length() ;
+            int length_of_number2 = number2.length() ;
+    
+            String result = "" ;
+    
+            for (int index = length_of_number2 - 1 ; index >= 0  ; index -- ){
+    
+                String product_with_added_zeros = multiplicationWithDigit(number1, Character.toString(number2.charAt(index))).concat("0".repeat(length_of_number2 - 1 - index));
+    
+                result = Addition(result, product_with_added_zeros );
+            }
+    
+            return result ;
+        }
+
+        public static String mul (AFloat number1 , AFloat number2 ){
+
+            String num1 = number1.getFloat();
+            String num2 = number2.getFloat();
+
+            boolean is_num1_positive = num1.charAt(0) == '-' ? false : true ;
+            boolean is_num2_positive = num2.charAt(0) == '-' ? false : true ;
+            
+            num1 = is_num1_positive ? num1 : num1.substring(1) ;
+            num2 = is_num2_positive ? num2 : num2.substring(1) ;
+
+            int index_of_decimal_number1 = (num1.indexOf('.') != -1 ) ? num1.indexOf('.') : num1.length() ;
+            int index_of_decimal_number2 = (num2.indexOf('.') != -1 ) ? num2.indexOf('.') : num2.length() ;
+    
+            String digits_after_point_num1 = num1.substring(Math.min(index_of_decimal_number1 + 1 , num1.length()) );
+            String digits_before_point_num1 = num1.substring(0, index_of_decimal_number1 );
+
+            String digits_after_point_num2 = num2.substring(Math.min(index_of_decimal_number2 + 1 , num1.length()) );
+            String digits_before_point_num2 = num2.substring(0, index_of_decimal_number2 );
+
+            String num1_int_type = digits_before_point_num1.concat(digits_after_point_num1);
+            String num2_int_type = digits_before_point_num2.concat(digits_after_point_num2);
+            
+            String result = multiply(num1_int_type, num2_int_type) ;
+
+            //System.out.println(result);
+            
+            int number_of_digits_after_point_InResult = result.length() - digits_after_point_num1.length() - digits_after_point_num2.length() ;
+
+            //System.out.println(number_of_digits_after_point_InResult);
+
+            if(result.substring(number_of_digits_after_point_InResult).isEmpty())
+                result = result.substring(0, number_of_digits_after_point_InResult);
+            else
+                result = result.substring(0,number_of_digits_after_point_InResult).concat(".".concat(result.substring(number_of_digits_after_point_InResult)));
+    
+            result = removeLeadingZeros(result) ;
+
+            result = removeEndingZeros(result) ;
+
+            return (is_num1_positive ^ is_num2_positive) ? "-".concat(result) : result ; 
+
         }
 
 }
