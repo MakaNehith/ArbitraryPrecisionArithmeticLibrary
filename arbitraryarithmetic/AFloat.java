@@ -256,7 +256,11 @@ public class AFloat {
         }
 
         // add fucntion for floating point numbers
-        public static String add ( String number1 , String number2 ){
+        public static String add ( AFloat num1 , AFloat num2 ){
+
+            String number1 = num1.getFloat();
+            String number2 = num2.getFloat();
+
             int index_of_decimal_number1 = (number1.indexOf('.') != -1 ) ? number1.indexOf('.') : number1.length() ;
             int index_of_decimal_number2 = (number2.indexOf('.') != -1 ) ? number2.indexOf('.') : number2.length() ;
     
@@ -315,7 +319,10 @@ public class AFloat {
             
         }
     
-        public static String sub( String number1 , String number2){
+        public static String sub( AFloat num1 , AFloat num2){
+
+            String number1 = num1.getFloat();
+            String number2 = num2.getFloat();
     
             int index_of_decimal_number1 = (number1.indexOf('.') != -1 ) ? number1.indexOf('.') : number1.length() ;
             int index_of_decimal_number2 = (number2.indexOf('.') != -1 ) ? number2.indexOf('.') : number2.length() ;
@@ -354,7 +361,7 @@ public class AFloat {
             int index_of_point_in_result = result.length() - max_of_digits_after_point;
 
 
-            if(result.substring(0,index_of_point_in_result).isEmpty())
+            if(result.substring(index_of_point_in_result).isEmpty())
                 result = result.substring(0, index_of_point_in_result);
             else
                 result = result.substring(0,index_of_point_in_result).concat(".".concat(result.substring(index_of_point_in_result)));

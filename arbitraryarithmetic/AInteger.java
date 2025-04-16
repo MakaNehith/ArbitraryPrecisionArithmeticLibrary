@@ -197,7 +197,10 @@ public class AInteger {
     }
 
     // Add function for two integers
-    public static String add(String number1 , String number2){
+    public static String add(AInteger num1 , AInteger num2){
+
+        String number1 = num1.getInteger();
+        String number2 = num2.getInteger();
 
         number1 = removeLeadingZeros(number1);
         number2 = removeLeadingZeros(number2);
@@ -235,7 +238,11 @@ public class AInteger {
 
 
     // Sub function for two integers
-    public static String sub(String number1 , String number2){
+    public static String sub(AInteger num1 , AInteger num2){
+
+        String number1 = num1.getInteger();
+        String number2 = num2.getInteger();
+
 
         number1 = removeLeadingZeros(number1) ;
         number2 = removeLeadingZeros(number2) ;
