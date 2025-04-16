@@ -207,11 +207,11 @@ public class AFloat {
                 }
             }
             else if( is_number1_positive == false && is_number2_positive == false ){
-                if(isGreater( number1.substring(1) , number2.substring(1) ) ){
-                    return "-".concat( subtract( number1.substring(1) , number2.substring(1) ) );
+                if(isGreater( number2.substring(1) , number1.substring(1) ) ){
+                    return subtract( number2.substring(1) , number1.substring(1) );
                 }
                 else{
-                    return subtract( number2.substring(1) , number1.substring(1) );
+                    return "-".concat( subtract( number1.substring(1) , number2.substring(1) ) );
                 }
             }
             else if( is_number1_positive == false && is_number2_positive == true ){
@@ -246,7 +246,12 @@ public class AFloat {
 
             //System.out.println(result);
     
-            result = result.substring(leading_zeros_index);
+            result = (leading_zeros_index == -1) ? "0" : (result.substring(leading_zeros_index)) ;
+
+            if( result.equals("0")){
+                return "0";
+            }
+
 
             return (is_positive) ? result : "-".concat(result) ;
 
@@ -284,8 +289,9 @@ public class AFloat {
         // add function for floating point numbers
         public static String add ( AFloat num1 , AFloat num2 ){
 
-            String number1 = num1.getFloat();
-            String number2 = num2.getFloat();
+            String number1 = removeLeadingZeros(num1.getFloat());
+            String number2 = removeLeadingZeros(num2.getFloat());
+
 
             int index_of_decimal_number1 = (number1.indexOf('.') != -1 ) ? number1.indexOf('.') : number1.length() ;
             int index_of_decimal_number2 = (number2.indexOf('.') != -1 ) ? number2.indexOf('.') : number2.length() ;
@@ -315,7 +321,8 @@ public class AFloat {
             
             // System.out.println(num1_int_type);
             // System.out.println(num2_int_type);
-    
+
+            //System.out.println(num1_int_type + " " + num2_int_type);
     
             String result = add_int(num1_int_type , num2_int_type);
             //System.out.println(result);
@@ -333,13 +340,13 @@ public class AFloat {
             else
                 result = result.substring(0,index_of_point_in_result).concat(".".concat(result.substring(index_of_point_in_result)));
 
-
+                //System.out.println(result);
     
             //System.out.println(result);
     
-            result = removeLeadingZeros(result) ;
-
             result = removeEndingZeros(result) ;
+            
+            result = removeLeadingZeros(result) ;
 
             return result ;
     
@@ -349,8 +356,9 @@ public class AFloat {
     
         public static String sub( AFloat num1 , AFloat num2){
 
-            String number1 = num1.getFloat();
-            String number2 = num2.getFloat(); 
+            String number1 = removeLeadingZeros(num1.getFloat());
+            String number2 = removeLeadingZeros(num2.getFloat());
+
     
             int index_of_decimal_number1 = (number1.indexOf('.') != -1 ) ? number1.indexOf('.') : number1.length() ;
             int index_of_decimal_number2 = (number2.indexOf('.') != -1 ) ? number2.indexOf('.') : number2.length() ;
@@ -377,10 +385,12 @@ public class AFloat {
     
             String num1_int_type = digits_before_point_num1.concat(digits_after_point_num1);
             String num2_int_type = digits_before_point_num2.concat(digits_after_point_num2);
-    
-    
+
+            //System.out.println(num1_int_type + " " + num2_int_type);
     
             String result = sub_int(num1_int_type , num2_int_type);
+
+            //System.out.println(result);
     
             // if(result.equals("0")){
             //     return "0.0";
@@ -394,9 +404,9 @@ public class AFloat {
             else
                 result = result.substring(0,index_of_point_in_result).concat(".".concat(result.substring(index_of_point_in_result)));
     
+            result = removeEndingZeros(result);
             result = removeLeadingZeros(result) ;
 
-            result = removeEndingZeros(result);
 
             return result;
     

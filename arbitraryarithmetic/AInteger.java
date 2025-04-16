@@ -124,15 +124,17 @@ public class AInteger {
         //System.out.println(result);
         
         // Handling the leading zeros after subtraction
-        int leading_zeros_index = -1 ;
-        for (int i = 0 ; i < result.length() ; i++ ){
-            if(result.charAt(i) != '0' ){
-                leading_zeros_index = i ;
-                break ;
-            }
-        }
+        // int leading_zeros_index = -1 ;
+        // for (int i = 0 ; i < result.length() ; i++ ){
+        //     if(result.charAt(i) != '0' ){
+        //         leading_zeros_index = i ;
+        //         break ;
+        //     }
+        // }
 
-        return result.substring(leading_zeros_index < 0 ? result.length() - 1 : leading_zeros_index);
+        // return result.substring(leading_zeros_index < 0 ? result.length() - 1 : leading_zeros_index);
+
+        return removeLeadingZeros(result);
     }
 
     private static boolean isGreater(String number1 , String number2){
@@ -259,11 +261,11 @@ public class AInteger {
             }
         }
         else if( is_number1_positive == false && is_number2_positive == false ){
-            if(isGreater( number1.substring(1) , number2.substring(1) ) ){
-                return "-".concat( subtract( number1.substring(1) , number2.substring(1) ) );
+            if(isGreater( number2.substring(1) , number1.substring(1) ) ){
+                return subtract( number2.substring(1) , number1.substring(1) );
             }
             else{
-                return subtract( number2.substring(1) , number1.substring(1) );
+                return "-".concat( subtract( number1.substring(1) , number2.substring(1) ) );
             }
         }
         else if( is_number1_positive == false && is_number2_positive == true ){
@@ -321,6 +323,10 @@ public class AInteger {
         String num1 = removeLeadingZeros(number1.getInteger());
         String num2 = removeLeadingZeros(number2.getInteger());
 
+        if(num1 == "0" || num2 == "0"){
+            return "0";
+        }
+
         boolean is_num1_positive = num1.charAt(0) == '-' ? false : true ;
         boolean is_num2_positive = num2.charAt(0) == '-' ? false : true ;
 
@@ -336,6 +342,84 @@ public class AInteger {
         else{
             return "-".concat(multiply(num1.substring(1),num2));
         }
+
+    }
+
+
+    public static String div ( AInteger number1 , AInteger number2 ){
+
+        String num1 = removeLeadingZeros(number1.getInteger());
+        String num2 = removeLeadingZeros(number2.getInteger());
+        
+        boolean is_positive_num1 = num1.charAt(0) == '-' ? false : true ;
+        boolean is_positive_num2 = num2.charAt(0) == '-' ? false : true ;
+
+        num1 = (is_positive_num1) ? num1 : num1.substring(1);
+        num2 = (is_positive_num2) ? num2 : num2.substring(1);
+
+        if(num2.equals("0")){
+            return "Division by zero Error" ;
+        }
+
+        if( ! isGreater(num1, num2) ){
+            return "0";
+        }
+
+        int length_of_num1 = num1.length();
+        int length_of_num2 = num2.length();
+
+        String result = "" ;
+
+        String divisor = num2 ;
+        //String sub_dividend = num1.substring(0,length_of_num2) ;
+        String sub_remainder = num1.substring(0,length_of_num2) ;
+
+        int endIndex_of_sub_dividend = length_of_num2 ;
+        int quotient = 0 ;
+        int flag = 0 ;
+
+        while(endIndex_of_sub_dividend <= length_of_num1){
+            if(isGreater(sub_remainder,divisor)){
+                if(flag == 0){
+                    flag = 1 ;
+                }
+                quotient ++ ;
+                divisor = add(new AInteger(divisor) , new AInteger(num2));
+            }
+            else{
+                if(flag == 1){
+                    result = result.concat(Integer.toString(quotient));
+                    if(endIndex_of_sub_dividend == length_of_num1){
+                        break;
+                    }
+                    else
+                        sub_remainder = sub(new AInteger(add(new AInteger(sub_remainder) , new AInteger(num2))), new AInteger(divisor)).concat(Character.toString(num1.charAt(endIndex_of_sub_dividend)));
+                        sub_remainder = removeLeadingZeros(sub_remainder);
+                        endIndex_of_sub_dividend ++ ;
+                    quotient = 0 ;
+                    flag = 0;
+                    divisor = num2 ;
+                }
+                else{
+                    result = result.concat(Integer.toString(quotient));
+                    if(endIndex_of_sub_dividend == length_of_num1){
+                        break;
+                    }
+                    else
+                        sub_remainder = sub(new AInteger(add(new AInteger(sub_remainder) , new AInteger(num2))), new AInteger(divisor)).concat(Character.toString(num1.charAt(endIndex_of_sub_dividend)));
+                        sub_remainder = removeLeadingZeros(sub_remainder);
+                        endIndex_of_sub_dividend ++ ;
+                }
+            
+            }
+            //System.out.println(result);
+
+            
+        }
+
+        result = removeLeadingZeros(result);
+
+        return (is_positive_num1 ^ is_positive_num2 ) ? "-".concat(result) : result ;
 
     }
 
