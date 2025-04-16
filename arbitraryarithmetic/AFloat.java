@@ -461,13 +461,18 @@ public class AFloat {
             String digits_after_point_num1 = num1.substring(Math.min(index_of_decimal_number1 + 1 , num1.length()) );
             String digits_before_point_num1 = num1.substring(0, index_of_decimal_number1 );
 
-            String digits_after_point_num2 = num2.substring(Math.min(index_of_decimal_number2 + 1 , num1.length()) );
+            String digits_after_point_num2 = num2.substring(Math.min(index_of_decimal_number2 + 1 , num2.length()) );
             String digits_before_point_num2 = num2.substring(0, index_of_decimal_number2 );
 
             String num1_int_type = digits_before_point_num1.concat(digits_after_point_num1);
             String num2_int_type = digits_before_point_num2.concat(digits_after_point_num2);
+
+            // System.out.println(num1_int_type);
+            // System.out.println(num2_int_type);
             
             String result = multiply(num1_int_type, num2_int_type) ;
+
+            //System.out.println(result);
 
             //System.out.println(result);
             
