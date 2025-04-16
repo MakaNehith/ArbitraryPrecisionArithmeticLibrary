@@ -322,7 +322,7 @@ public class AFloat {
         public static String sub( AFloat num1 , AFloat num2){
 
             String number1 = num1.getFloat();
-            String number2 = num2.getFloat();
+            String number2 = num2.getFloat(); 
     
             int index_of_decimal_number1 = (number1.indexOf('.') != -1 ) ? number1.indexOf('.') : number1.length() ;
             int index_of_decimal_number2 = (number2.indexOf('.') != -1 ) ? number2.indexOf('.') : number2.length() ;
