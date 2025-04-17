@@ -508,4 +508,120 @@ public class AFloat {
 
         }
 
+
+
+        // div fucntion for the division of floating point numbers
+
+        public static String div ( AFloat number1 , AFloat number2 ){
+
+            String num1 = removeLeadingZeros(removeEndingZeros(number1.getFloat()));
+            String num2 = removeLeadingZeros(removeEndingZeros(number2.getFloat()));
+
+            //System.out.println(num1 + " " + num2);
+
+            if(num2.equals("0")){
+                throw new ArithmeticException("Division by zero error");
+            }
+
+            boolean is_num1_positive = num1.charAt(0) == '-' ? false : true ;
+            boolean is_num2_positive = num2.charAt(0) == '-' ? false : true ;
+
+            num1 = (is_num1_positive) ? num1 : num1.substring(1) ;
+            num2 = (is_num2_positive) ? num2 : num2.substring(1) ;
+
+            int index_of_decimal_number1 = (num1.indexOf('.') != -1 ) ? num1.indexOf('.') : num1.length() ;
+            int index_of_decimal_number2 = (num2.indexOf('.') != -1 ) ? num2.indexOf('.') : num2.length() ;
+
+            int number_of_digits_after_point_num1 = ((num1.indexOf('.')) == -1) ? 0 : (num1.length() - 1 - num1.indexOf('.')) ;
+            int number_of_digits_after_point_num2 = ((num2.indexOf('.')) == -1) ? 0 : (num2.length() - 1 - num2.indexOf('.')) ;
+
+            int max_number_of_digits_after_point = Math.max( number_of_digits_after_point_num1, number_of_digits_after_point_num2);
+
+            num1 = num1.substring(0,index_of_decimal_number1).concat(num1.substring(Math.min(index_of_decimal_number1+1,num1.length()))).concat("0".repeat(max_number_of_digits_after_point - number_of_digits_after_point_num1));
+            num2 = num2.substring(0,index_of_decimal_number2).concat(num2.substring(Math.min(index_of_decimal_number2+1,num2.length()))).concat("0".repeat(max_number_of_digits_after_point - number_of_digits_after_point_num2));
+
+            num1 = removeEndingZeros(num1);
+            num2 = removeLeadingZeros(num2);
+
+            //System.out.println(num1 + " " + num2);
+
+            String result = "" ;
+            int quotient = 0 ;
+            int index_of_dividend = 1 ;
+            String divisor = num2 ;
+            String sub_remainder = num1.substring(0,1);
+            int flag = 0 ;
+            
+            while(true){
+                if(isGreater(sub_remainder, divisor)){
+                    if(flag == 0 ){
+                        flag = 1 ;
+                    }
+                    quotient ++ ;
+                    divisor = add_int(divisor, num2);
+                }
+                else{
+                    if(flag  == 1){
+                        result = result.concat(Integer.toString(quotient));
+                        sub_remainder = removeLeadingZeros(sub_int(add_int(sub_remainder, num2), divisor));
+
+                        divisor = num2 ;
+                        quotient = 0 ;
+                        flag = 0 ;
+
+                        if(sub_remainder.equals("0") && index_of_dividend >= num1.length()){
+                            break;
+                        }
+
+                        if( index_of_dividend >= 1000 + num1.length()){
+                            break;
+                        }
+
+                        if( index_of_dividend >= num1.length()){
+                            // if( flag2 == 0 ){
+                            //     result = result.concat(".");
+                            //     flag2 = 1 ;
+                            // }
+                            sub_remainder = sub_remainder.concat("0");
+                        }
+
+                        else{
+                            sub_remainder = sub_remainder.concat(Character.toString(num1.charAt(index_of_dividend)));
+                        }
+                    }
+                    else{
+                        result = result.concat(Integer.toString(quotient));
+
+                        if( index_of_dividend >= 1000 + num1.length()){
+                            break;
+                        }
+
+                        if( index_of_dividend < num1.length() ){
+                            sub_remainder = sub_remainder.concat(Character.toString(num1.charAt(index_of_dividend)));
+                        }
+                        else{
+                            sub_remainder = sub_remainder.concat("0");
+                        }
+                    }
+                    
+                    sub_remainder = removeLeadingZeros(sub_remainder);
+                    index_of_dividend ++ ;
+                    //System.out.println(sub_remainder);
+                    if( index_of_dividend - 1 == num1.length() ){
+                        result = result.concat(".");
+                    }
+
+                    
+                }
+            }
+
+            result = removeLeadingZeros(removeEndingZeros(result));
+
+            if(result.equals("0")){
+                return "0";
+            }
+
+            return ( is_num1_positive ^ is_num2_positive ) ? "-".concat(result) : result ;
+        }
+
 }

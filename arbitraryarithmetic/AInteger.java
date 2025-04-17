@@ -358,7 +358,7 @@ public class AInteger {
         num2 = (is_positive_num2) ? num2 : num2.substring(1);
 
         if(num2.equals("0")){
-            return "Division by zero Error" ;
+            throw new ArithmeticException("Division by zero Error");
         }
 
         if( ! isGreater(num1, num2) ){
