@@ -456,8 +456,8 @@ public class AFloat {
 
         public static String mul (AFloat number1 , AFloat number2 ){
 
-            String num1 = number1.getFloat();
-            String num2 = number2.getFloat();
+            String num1 = removeLeadingZeros(number1.getFloat());
+            String num2 = removeLeadingZeros(number2.getFloat());
 
             boolean is_num1_positive = num1.charAt(0) == '-' ? false : true ;
             boolean is_num2_positive = num2.charAt(0) == '-' ? false : true ;
@@ -494,10 +494,15 @@ public class AFloat {
                 result = result.substring(0, number_of_digits_after_point_InResult);
             else
                 result = result.substring(0,number_of_digits_after_point_InResult).concat(".".concat(result.substring(number_of_digits_after_point_InResult)));
-    
+            
+            //System.out.println(result);
             result = removeLeadingZeros(result) ;
 
             result = removeEndingZeros(result) ;
+
+            if(result.equals("0")){
+                return "0";
+            }
 
             return (is_num1_positive ^ is_num2_positive) ? "-".concat(result) : result ; 
 
