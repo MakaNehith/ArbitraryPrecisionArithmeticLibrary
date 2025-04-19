@@ -88,7 +88,7 @@ public class AInteger {
         int prev = 0; // this is a check , whether the digit to its right has taken borrow from it 
         int curr = 0; // this is a check , whether the current digit takes a borrow from the digit to its left
 
-        // Implementing the low level subtraction from right to left
+        // Implementing the basic subtraction from right to left
         // This loop performs the subtraction of numbers, that is, we subtract s2 from the substring of s1 of length s2 from right
         while( index1 >= 0 && index2 >= 0 ){
             int current_digit = (int)s1.charAt(index1) - prev - '0' ;
@@ -191,6 +191,7 @@ public class AInteger {
         // If there is no non-zero digit, it implies that the number is zero
         result = (index_of_nonzero_digit == -1) ? "0" : (result.substring(index_of_nonzero_digit)) ;
 
+        // Handling the case when result is zero to avoid concatenating a negative sign (-) to zero
         if(result.equals("0")){
             return result;
         }
@@ -306,7 +307,7 @@ public class AInteger {
 
             carry = product / 10 ;
 
-            // Taking the last digit from the ( product + carry ) and concatenating to the start of result
+            // Taking the last digit from the ( product + carry ) and concatenating it to the start of result
             result = Integer.toString(( product - (carry * 10) )).concat(result);
         }
 
@@ -318,13 +319,13 @@ public class AInteger {
     }
 
 
-    // Helper function for multiplying two non zero integers
+    // Helper function for multiplying two non negative integers
     private static String multiply (String number1 , String number2){
 
         //int length_of_number1 = number1.length() ;
         int length_of_number2 = number2.length() ;
 
-        String result = "" ;
+        String result = "0" ;
 
         // Multiplying each digit from the number2 from right to left and adding (length_of_number2 - 1 - index) number of zeros at the end
         for (int index = length_of_number2 - 1 ; index >= 0  ; index -- ){
@@ -385,6 +386,7 @@ public class AInteger {
         boolean is_positive_num1 = num1.charAt(0) == '-' ? false : true ;
         boolean is_positive_num2 = num2.charAt(0) == '-' ? false : true ;
 
+        // Extracting the absolute value of num1 and num2
         num1 = (is_positive_num1) ? num1 : num1.substring(1);
         num2 = (is_positive_num2) ? num2 : num2.substring(1);
 
@@ -413,7 +415,7 @@ public class AInteger {
         int flag = 0 ;
 
        /*
-        * In this loop, we first check whether the sub_remainder is greater than the divisor.
+        * In this loop, we first check whether the sub_remainder(instanteous dividend) is greater than the divisor.
         * If it is, the quotient is incremented until the product of the quotient and the divisor 
         * is just less than the sub_dividend.
         * The quotient is then appended to the result.
