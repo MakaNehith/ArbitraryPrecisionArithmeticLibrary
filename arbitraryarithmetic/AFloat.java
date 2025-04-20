@@ -329,7 +329,7 @@ public class AFloat {
 
 
         // add function for adding floating point numbers
-        public static String add ( AFloat number1 , AFloat number2 ){
+        public static AFloat add ( AFloat number1 , AFloat number2 ){
 
             // accessing the numbers from AFloat Objects number1 and number2 and removing leading zeros from the numbers
             String num1 = removeLeadingZeros(number1.getFloat());
@@ -389,12 +389,12 @@ public class AFloat {
             
             result = removeLeadingZeros(result) ;
 
-            return convertToFloat(result) ;
+            return parse(convertToFloat(result)) ;
             
         }
 
         // sub function for subtracting two floating point numbers
-        public static String sub( AFloat num1 , AFloat num2){
+        public static AFloat sub( AFloat num1 , AFloat num2){
 
             // accessing the numbers from AFloat Objects number1 and number2 and removing leading zeros from the numbers
             String number1 = removeLeadingZeros(num1.getFloat());
@@ -451,7 +451,7 @@ public class AFloat {
             result = removeEndingZeros(result);
             result = removeLeadingZeros(result) ;
 
-            return convertToFloat(result);
+            return parse(convertToFloat(result));
     
     
         }
@@ -509,7 +509,7 @@ public class AFloat {
         
 
         // mul fucntion for multiplying two floating point numbers
-        public static String mul (AFloat number1 , AFloat number2 ){
+        public static AFloat mul (AFloat number1 , AFloat number2 ){
 
             // accessing the numbers from AFloat Objects number1 and number2 and removing leading zeros from the numbers
             String num1 = removeLeadingZeros(number1.getFloat());
@@ -566,13 +566,13 @@ public class AFloat {
 
             // Handling the case when result is zero to avoid concatenating a negative sign (-) to zero
             if(result.equals("0")){
-                return "0.0";
+                return parse("0.0");
             }
 
             // Handling the sign of the product based on the sign of num1 and num2
             result = (is_num1_positive ^ is_num2_positive) ? "-".concat(result) : result ; 
 
-            return convertToFloat(result);
+            return parse(convertToFloat(result));
 
         }
 
@@ -580,7 +580,7 @@ public class AFloat {
 
         // div function for the division of floating point numbers
 
-        public static String div ( AFloat number1 , AFloat number2 ){
+        public static AFloat div ( AFloat number1 , AFloat number2 ){
 
             
             // Accessing the strings from objects number1 and number2 and removing leading zeros and trailing zeros from the strings
@@ -704,13 +704,13 @@ public class AFloat {
 
             // Handling the case when result is zero to avoid concatenating a negative sign (-) to zero
             if(result.equals("0")){
-                return "0.0";
+                return parse("0.0");
             }
 
             // Handling the sign of the product based on the sign of num1 and num2
             result = ( is_num1_positive ^ is_num2_positive ) ? "-".concat(result) : result ;
 
-            return convertToFloat(result);
+            return parse(convertToFloat(result));
         }
 
 }
