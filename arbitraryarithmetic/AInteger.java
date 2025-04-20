@@ -201,7 +201,7 @@ public class AInteger {
 
 
     // Add function for adding two integers
-    public static String add(AInteger number1 , AInteger number2){
+    public static AInteger add(AInteger number1 , AInteger number2){
 
         //Accessing the numbers from AInteger Objects number1 and number2
         String num1 = number1.getInteger();
@@ -213,40 +213,44 @@ public class AInteger {
         boolean is_number1_positive = ( num1.charAt(0) != '-' ) ? true : false ;
         boolean is_number2_positive = ( num2.charAt(0) != '-' ) ? true : false ;
 
+        String result;
+
         // Performing the addition or subtraction based on the sign of num1 and num2
 
         // num1 is positive and num2 is positive
         if( is_number1_positive && is_number2_positive ){
-            return Addition(num1, num2);
+            result = Addition(num1, num2);
         }
         // num1 is negative and num2 is negative
         else if( is_number1_positive == false && is_number2_positive == false ){
-            return "-" .concat( Addition( num1.substring(1) , num2.substring(1) ) );
+            result = "-" .concat( Addition( num1.substring(1) , num2.substring(1) ) );
         }
         // num1 is positive and num2 is negative
         else if( is_number1_positive == true && is_number2_positive == false ){
             if(isGreater( num1 , num2.substring(1))){
-                return subtract(num1, num2.substring(1));
+                result = subtract(num1, num2.substring(1));
             }
             else{
-                return "-".concat(subtract(num2.substring(1) , num1));
+                result = "-".concat(subtract(num2.substring(1) , num1));
             }
         }
         // num1 is negative and num2 is positive
         else{
             if(isGreater( num2 , num1.substring(1))){
-                return subtract(num2, num1.substring(1));
+                result = subtract(num2, num1.substring(1));
             }
             else{
-                return "-".concat(subtract(num1.substring(1) , num2));
+                result = "-".concat(subtract(num1.substring(1) , num2));
             }
         }
+
+        return parse(result);
 
     }
 
 
     // Sub function for subtraction of two integers
-    public static String sub(AInteger number1 , AInteger number2){
+    public static AInteger sub(AInteger number1 , AInteger number2){
 
         //Accessing the numbers from AInteger Objects number1 and number2
         String num1 = number1.getInteger();
@@ -259,34 +263,38 @@ public class AInteger {
         boolean is_number1_positive = ( num1.charAt(0) != '-' ) ? true : false ;
         boolean is_number2_positive = ( num2.charAt(0) != '-' ) ? true : false ;
 
+        String result;
+
         // Performing the addition or subtraction based on the sign of num1 and num2
 
         // num1 is positive and num2 is positive
         if( is_number1_positive && is_number2_positive ){
             if(isGreater(num1, num2)){
-                return subtract(num1, num2);
+                result = subtract(num1, num2);
             }
             else{
-                return "-".concat(subtract(num2, num1));
+                result = "-".concat(subtract(num2, num1));
             }
         }
         // num1 is negative and num2 is negative
         else if( is_number1_positive == false && is_number2_positive == false ){
             if(isGreater( num2.substring(1) , num1.substring(1) ) ){
-                return subtract( num2.substring(1) , num1.substring(1) );
+                result = subtract( num2.substring(1) , num1.substring(1) );
             }
             else{
-                return "-".concat( subtract( num1.substring(1) , num2.substring(1) ) );
+                result = "-".concat( subtract( num1.substring(1) , num2.substring(1) ) );
             }
         }
         // num1 is negative and num2 is positive
         else if( is_number1_positive == false && is_number2_positive == true ){
-            return "-".concat(Addition(num1.substring(1), num2));
+            result =  "-".concat(Addition(num1.substring(1), num2));
         }
         // num1 is positive and num2 is negative
         else{
-            return Addition(num1, num2.substring(1));
+            result = Addition(num1, num2.substring(1));
         }
+
+        return parse(result);
     }
 
 
@@ -340,7 +348,7 @@ public class AInteger {
     }
 
     //mul function for multiplting two integers
-    public static String mul (AInteger number1 , AInteger number2 ){
+    public static AInteger mul (AInteger number1 , AInteger number2 ){
         
         // Accessing the strings from objects number1 and number2 and removing leading zeros from the strings
         String num1 = removeLeadingZeros(number1.getInteger());
@@ -348,36 +356,40 @@ public class AInteger {
 
         // Handling the case when num1 or num2 is 0
         if(num1 == "0" || num2 == "0"){
-            return "0";
+            return parse("0");
         }
 
         boolean is_num1_positive = num1.charAt(0) == '-' ? false : true ;
         boolean is_num2_positive = num2.charAt(0) == '-' ? false : true ;
 
+        String result;
+
         // Handling the sign of the product by splitting it into four cases
 
         // num1 is positive and num2 is positive
         if( is_num1_positive && is_num2_positive ){
-            return multiply(num1, num2);
+            result = multiply(num1, num2);
         }
         // num1 is negative and num2 is negative 
         else if( is_num1_positive == false && is_num2_positive == false ){
-            return multiply(num1.substring(1), num2.substring(1));
+            result = multiply(num1.substring(1), num2.substring(1));
         }
         // num1 is positive and num2 is negative
         else if( is_num1_positive == true && is_num2_positive == false ){
-            return "-".concat(multiply(num1, num2.substring(1)));
+            result = "-".concat(multiply(num1, num2.substring(1)));
         }
         // num1 is negative and num2 is positive
         else{
-            return "-".concat(multiply(num1.substring(1),num2));
+            result = "-".concat(multiply(num1.substring(1),num2));
         }
+
+        return parse(result);
 
     }
 
 
     // div function for dividing two integers ( Integer division )
-    public static String div ( AInteger number1 , AInteger number2 ){
+    public static AInteger div ( AInteger number1 , AInteger number2 ){
 
         // Accessing the strings from objects number1 and number2 and removing leading zeros from the strings
         String num1 = removeLeadingZeros(number1.getInteger());
@@ -397,7 +409,7 @@ public class AInteger {
 
         // If num1 is less than num2, the quotient is zero
         if( ! isGreater(num1, num2) ){
-            return "0";
+            return parse("0");
         }
 
         int length_of_num1 = num1.length();
@@ -432,7 +444,7 @@ public class AInteger {
                     flag = 1 ;
                 }
                 quotient ++ ;
-                divisor = add(new AInteger(divisor) , new AInteger(num2));
+                divisor = add(new AInteger(divisor) , new AInteger(num2)).getInteger();
             }
             else{
                 result = result.concat(Integer.toString(quotient));
@@ -443,7 +455,7 @@ public class AInteger {
                 }
 
                 // computing the remainder when sub_remainder is divided by divisor and concatenating it to the next digit from num1
-                sub_remainder = sub(new AInteger(add(new AInteger(sub_remainder) , new AInteger(num2))), new AInteger(divisor)).concat(Character.toString(num1.charAt(endIndex_of_sub_dividend)));
+                sub_remainder = sub(add(new AInteger(sub_remainder) , new AInteger(num2)), new AInteger(divisor)).getInteger().concat(Character.toString(num1.charAt(endIndex_of_sub_dividend)));
                 sub_remainder = removeLeadingZeros(sub_remainder);
                 endIndex_of_sub_dividend ++ ;
 
@@ -460,7 +472,9 @@ public class AInteger {
         result = removeLeadingZeros(result);
 
         // Set the sign of quotient based on whether num1 and num2 have the same or different signs
-        return (is_positive_num1 ^ is_positive_num2 ) ? "-".concat(result) : result ;
+        result = (is_positive_num1 ^ is_positive_num2 ) ? "-".concat(result) : result ;
+
+        return parse(result);
 
     }
 }
