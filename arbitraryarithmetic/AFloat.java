@@ -315,6 +315,17 @@ public class AFloat {
         }
 
 
+        // Function to convert an integer to float by adding ".0" to the end
+        private static String convertToFloat(String number){
+            // Checking whether decimal point is present in the string(number)
+            if( number.indexOf('.') == -1 ){
+                // If decimal point is not present, appending ".0" to the number
+                return number.concat(".0");
+            }
+            else{
+                return number;
+            }
+        }
 
 
         // add function for adding floating point numbers
@@ -378,7 +389,7 @@ public class AFloat {
             
             result = removeLeadingZeros(result) ;
 
-            return result ;
+            return convertToFloat(result) ;
             
         }
 
@@ -440,7 +451,7 @@ public class AFloat {
             result = removeEndingZeros(result);
             result = removeLeadingZeros(result) ;
 
-            return result;
+            return convertToFloat(result);
     
     
         }
@@ -555,11 +566,13 @@ public class AFloat {
 
             // Handling the case when result is zero to avoid concatenating a negative sign (-) to zero
             if(result.equals("0")){
-                return "0";
+                return "0.0";
             }
 
             // Handling the sign of the product based on the sign of num1 and num2
-            return (is_num1_positive ^ is_num2_positive) ? "-".concat(result) : result ; 
+            result = (is_num1_positive ^ is_num2_positive) ? "-".concat(result) : result ; 
+
+            return convertToFloat(result);
 
         }
 
@@ -691,11 +704,13 @@ public class AFloat {
 
             // Handling the case when result is zero to avoid concatenating a negative sign (-) to zero
             if(result.equals("0")){
-                return "0";
+                return "0.0";
             }
 
             // Handling the sign of the product based on the sign of num1 and num2
-            return ( is_num1_positive ^ is_num2_positive ) ? "-".concat(result) : result ;
+            result = ( is_num1_positive ^ is_num2_positive ) ? "-".concat(result) : result ;
+
+            return convertToFloat(result);
         }
 
 }
