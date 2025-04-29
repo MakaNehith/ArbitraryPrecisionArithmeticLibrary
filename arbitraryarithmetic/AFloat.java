@@ -327,6 +327,33 @@ public class AFloat {
             }
         }
 
+        // function to truncate the result obtained by performing the arithmetic operations to 30 decimal places
+        private static String truncate(String number){
+
+            int index_of_decimal_point = number.indexOf('.');
+            
+            // Returning the number as it is if it is an integer or if number of digits after the decimal point is less than or equal to 30
+            if(index_of_decimal_point == -1){
+                return number;
+            }
+
+            if(number.substring(index_of_decimal_point + 1).length() <= 30){
+                return number;
+            }
+
+            // extracting the number with 30 digits after decimal point from the given number
+            String result = number.substring(0,index_of_decimal_point+30+1);
+
+            // if(result.substring(0,index_of_decimal_point).equals("0") && result.substring(index_of_decimal_point+1).equals("0".repeat(30))){
+            //     result = result.substring(1);
+            // }
+
+            return result;
+
+
+            
+        }
+
 
         // add function for adding floating point numbers
         public static AFloat add ( AFloat number1 , AFloat number2 ){
@@ -353,7 +380,7 @@ public class AFloat {
             int max_of_digits_after_point = Math.max(digits_after_point_num1.length(),digits_after_point_num2.length());
     
 
-            /* Padding (concatenating) the zeros at the end of numbers after decimal point(digits_after_point_num2 and digits_after_point_num1)
+            /* appending (concatenating) the zeros at the end of numbers after decimal point(digits_after_point_num2 and digits_after_point_num1)
              * to make the the number of digits after decimal point equal in both 
              */
             digits_after_point_num1 = digits_after_point_num1.concat("0".repeat(max_of_digits_after_point - digits_after_point_num1.length()));
@@ -389,6 +416,8 @@ public class AFloat {
             
             result = removeLeadingZeros(result) ;
 
+            result = truncate(result);
+
             return parse(convertToFloat(result)) ;
             
         }
@@ -418,7 +447,7 @@ public class AFloat {
             int max_of_digits_after_point = Math.max(digits_after_point_num1.length(),digits_after_point_num2.length());
     
 
-            /* Padding (concatenating) the zeros at the end of numbers after decimal point(digits_after_point_num2 and digits_after_point_num1)
+            /* appending (concatenating) the zeros at the end of numbers after decimal point(digits_after_point_num2 and digits_after_point_num1)
              * to make the the number of digits after decimal point equal in both 
              */
             digits_after_point_num1 = digits_after_point_num1.concat("0".repeat(max_of_digits_after_point - digits_after_point_num1.length()));
@@ -450,6 +479,8 @@ public class AFloat {
             // Removing trailing and leading zeros from the result
             result = removeEndingZeros(result);
             result = removeLeadingZeros(result) ;
+
+            result = truncate(result);
 
             return parse(convertToFloat(result));
     
@@ -572,6 +603,8 @@ public class AFloat {
             // Handling the sign of the product based on the sign of num1 and num2
             result = (is_num1_positive ^ is_num2_positive) ? "-".concat(result) : result ; 
 
+            result = truncate(result);
+
             return parse(convertToFloat(result));
 
         }
@@ -587,6 +620,10 @@ public class AFloat {
             String num1 = removeLeadingZeros(removeEndingZeros(number1.getFloat()));
             String num2 = removeLeadingZeros(removeEndingZeros(number2.getFloat()));
 
+            // Handling the case when dividend is zero
+            if(num1.equals("0")){
+                return parse("0.0");
+            }
 
             // Raising an arithmetic exception when divisor(num2) is zero
             if(num2.equals("0")){
@@ -615,7 +652,7 @@ public class AFloat {
             int max_number_of_digits_after_point = Math.max( number_of_digits_after_point_num1, number_of_digits_after_point_num2);
 
 
-            /* Padding (concatenating) the zeros at the end of numbers after decimal point(digits_after_point_num2 and digits_after_point_num1)
+            /* appending (concatenating) the zeros at the end of numbers after decimal point(digits_after_point_num2 and digits_after_point_num1)
              * to make the the number of digits after decimal point equal in both.
              * Concatenating the digits before point and the digits after point padded with zeros to obtain the num1 and num2 in integer representation
              */
@@ -643,7 +680,7 @@ public class AFloat {
              * and the next digit from number1 is concatenated to the sub_remainder.
              * If the sub_remainder becomes zero at the last digit of number1, the loop breaks.
              * Otherwise, zeros are repeatedly appended to the end of the sub_remainder, and division continues 
-             * until the sub_remainder becomes zero or until 1000 digits after the decimal point are computed.
+             * until the sub_remainder becomes zero at the last digit of dividend or until 30 digits after the decimal point are computed.
              */
             
             while(true){
@@ -661,20 +698,20 @@ public class AFloat {
                         // computing the remainder when sub_remainder is divided by divisor
                         sub_remainder = removeLeadingZeros(sub_int(add_int(sub_remainder, num2), divisor));
 
-                        // If the sub_remainder becomes zero, the loop breaks
-                        if(sub_remainder.equals("0") && index_of_dividend >= num1.length()){
-                            break;
-                        }
                         // Making the quotient equal to zero and divisor equal to num2 after every division between sub_remainder and divisor with quotient not equal to zero
                         divisor = num2 ;
                         quotient = 0 ;
                         flag = 0 ;
-
-
+                        
+                        
                     }
-
-                    // When 1000 digits are computed after the decimal point, the loop breaks
-                    if( index_of_dividend >= 1000 + num1.length()){
+                    // If the sub_remainder becomes zero at the last digit of the dividend, the loop breaks
+                    if(sub_remainder.equals("0") && index_of_dividend >= num1.length()){
+                        break;
+                    }
+                    
+                    // When 30 digits are computed after the decimal point, the loop breaks
+                    if( index_of_dividend >= 30 + num1.length()){
                         break;
                     }
 
@@ -698,14 +735,8 @@ public class AFloat {
                 }
             }
 
-
-            // Removing trailing and leading zeros from the result
-            result = removeLeadingZeros(removeEndingZeros(result));
-
-            // Handling the case when result is zero to avoid concatenating a negative sign (-) to zero
-            if(result.equals("0")){
-                return parse("0.0");
-            }
+            // Removing leading zeros from the result
+            result = removeLeadingZeros(result);
 
             // Handling the sign of the product based on the sign of num1 and num2
             result = ( is_num1_positive ^ is_num2_positive ) ? "-".concat(result) : result ;
