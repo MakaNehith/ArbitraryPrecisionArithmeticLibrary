@@ -1,41 +1,36 @@
 <project name="SDF_PROJECT" default="runMyInfArith" basedir=".">
 
-    <description>
-        Build file for the arbitraryarithmetic package
-    </description>
-
     <property name="package" location="arbitraryarithmetic"/>
     <property name="buildfiles" location="build"/>
     <property name="jarfile" location="arbitraryarithmetic/aarithmetic.jar"/>
-    <property name="MyInfArithClass" value="MyInfArith"/>
+    <property name="mainClass" value="MyInfArith"/>
     <property name="arg1" value=""/>
     <property name="arg2" value=""/>
     <property name="arg3" value=""/>
     <property name="arg4" value=""/>
 
-    <!-- Compile core classes -->
-    <target name="compile" description="compiles AFloat.java and AInteger.java">
+    <target name="compile"
+            description="compilation of AFloat.java and AInteger.java">
         <mkdir dir="${buildfiles}"/>
-        <javac srcdir="${package}" destdir="${buildfiles}" includeantruntime="false"/>
+        <javac srcdir="${package}" destdir="${buildfiles}"/>
     </target>
 
-    <!-- Package core classes into JAR -->
-    <target name="distributable" depends="compile" description="generates the jar file">
+    <target name="distributable" depends="compile"
+            description="This generates the jar file using .class files in /Build">
         <jar jarfile="${jarfile}" basedir="${buildfiles}"/>
     </target>
 
-    <!-- Compile MyInfArith class -->
-    <target name="compileMyInfArith" depends="distributable">
-        <javac srcdir="." destdir="." includeantruntime="false">
+    <target name="compileMyInfArith" depends="distributable"
+            description="This compiles MyInfArith with the jar file" >
+        <javac srcdir="." destdir=".">
             <classpath>
                 <pathelement path="${jarfile}"/>
             </classpath>
         </javac>
     </target>
 
-    <!-- Run MyInfArith with arguments -->
     <target name="runMyInfArith" depends="compileMyInfArith">
-        <java classname="${MyInfArithClass}" fork="true">
+        <java classname="${mainClass}" fork="true">
             <classpath>
                 <pathelement path="."/>
                 <pathelement path="${jarfile}"/>
@@ -47,13 +42,12 @@
         </java>
     </target>
 
-    <!-- Clean target -->
-    <target name="clean" description="Removes the build files and distributable">
+    <target name="clean"
+            description="Deletes the build files and distributable(aarithmetic.jar file)">
         <delete dir="${buildfiles}"/>
         <delete>
             <fileset dir="${package}" includes="**/*.jar"/>
             <fileset dir="." includes="**/MyInfArith.class"/>
         </delete>
     </target>
-
 </project>
