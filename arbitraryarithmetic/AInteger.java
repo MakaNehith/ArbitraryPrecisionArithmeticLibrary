@@ -140,7 +140,7 @@ public class AInteger {
 
     
     // Comparison function to check whether number1 is greater than or equal to number2
-    // Here, the arguments which are being passed to this function should be non-negative anf free from leading zeros
+    // Here, the arguments which are being passed to this function should be non-negative and free from leading zeros
     private static boolean isGreater(String number1 , String number2){
         int lengthOfNumber1 = number1.length();
         int lengthOfNumber2 = number2.length();
