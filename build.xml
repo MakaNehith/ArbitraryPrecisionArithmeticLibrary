@@ -21,7 +21,7 @@
     </target>
 
     <target name="compileMyInfArith" depends="distributable"
-            description="This compiles MyInfArith with the jar file" >
+            description="This compiles MyInfArith with the jar file">
         <javac srcdir="." destdir=".">
             <classpath>
                 <pathelement path="${jarfile}"/>
