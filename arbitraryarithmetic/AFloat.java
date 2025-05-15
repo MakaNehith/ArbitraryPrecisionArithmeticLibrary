@@ -711,7 +711,7 @@ public class AFloat {
                     }
                     
                     // When 30 digits are computed after the decimal point, the loop breaks
-                    if( index_of_dividend >= 1000 + num1.length()){
+                    if( index_of_dividend >= 30 + num1.length()){
                         break;
                     }
 
